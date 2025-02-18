@@ -2,8 +2,8 @@ from typing import Dict, List, Optional, Any, Union
 import psycopg2
 import pandas as pd
 
-from src.rsq_aws.redshift.core._connection import RedshiftConnection
-from src.rsq_aws.redshift.core.credentials import Credentials
+from src.rsq_aws.redshift._private._interfaces import RedshiftConnection
+from src.rsq_aws.redshift._private._helpers import Credentials
 
 class PsycopgConnection(RedshiftConnection):
     """

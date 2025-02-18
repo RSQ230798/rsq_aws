@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from src.rsq_aws.redshift.core.credentials import Credentials
+from src.rsq_aws.redshift._private._helpers import Credentials
 
 class TestCredentials(unittest.TestCase):
     """Test suite for Credentials class."""

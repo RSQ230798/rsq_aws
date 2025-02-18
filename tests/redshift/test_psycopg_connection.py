@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import Mock, patch, MagicMock
 import pandas as pd
 import psycopg2
-from src.rsq_aws.redshift.core.psycopg_connection import PsycopgConnection
+from src.rsq_aws.redshift.psycopg_connection import PsycopgConnection
 
 class TestPsycopg2Connection(unittest.TestCase):
     """Test suite for Psycopg2Connection class."""
