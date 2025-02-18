@@ -27,8 +27,8 @@ class PsycopgConnection(RedshiftConnection):
             Exception: If connection to Redshift fails
         """
         super().__init__(workgroup, database, region)
-        self.host = host
-        self.port = port
+        self.host: str = host
+        self.port: str = port
         self.connection: Optional[psycopg2.extensions.connection] = None
         self._connect()
 
