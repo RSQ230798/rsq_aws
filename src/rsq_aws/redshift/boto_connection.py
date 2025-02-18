@@ -4,7 +4,7 @@ import pandas as pd
 
 from src.rsq_aws.redshift._private._interfaces import RedshiftConnection
 
-class BotoConnection(RedshiftConnection):
+class BotoConnection:
     """
     A class to handle AWS Redshift data operations using the redshift-data API.
     
@@ -24,8 +24,10 @@ class BotoConnection(RedshiftConnection):
         Raises:
             Exception: If connection to Redshift fails
         """
-        super().__init__(workgroup, database, region)
-        self.client = boto3.client('redshift-data', region=self.region)
+        self.workgroup: str = workgroup
+        self.database: str = database
+        self.region: str = region
+        self.client = boto3.client('redshift-data', region_name=self.region)
 
     def query(self, sql: str) -> pd.DataFrame:
         """

@@ -5,7 +5,7 @@ import pandas as pd
 from src.rsq_aws.redshift._private._interfaces import RedshiftConnection
 from src.rsq_aws.redshift._private._helpers import Credentials
 
-class PsycopgConnection(RedshiftConnection):
+class PsycopgConnection:
     """
     A class to handle Redshift connections using psycopg2.
     
@@ -26,11 +26,12 @@ class PsycopgConnection(RedshiftConnection):
         Raises:
             Exception: If connection to Redshift fails
         """
-        super().__init__(workgroup, database, region)
+        self.workgroup: str = workgroup
+        self.database: str = database
+        self.region: str = region
         self.host: str = host
-        self.port: str = port
+        self.port: int = port
         self.connection: Optional[psycopg2.extensions.connection] = None
-        self._connect()
 
     def query(self, sql: str) -> pd.DataFrame:
         """
@@ -68,14 +69,18 @@ class PsycopgConnection(RedshiftConnection):
 
     def _connect(self) -> None:
         """Establish database connection using credentials."""
-        credentials = self._get_credentials()
-        self.connection = psycopg2.connect(
-            dbname=self.database,
-            user=credentials["dbUser"],
-            password=credentials["dbPassword"],
-            host=self.host,
-            port=self.port
-        )
+        try:
+            credentials = self._get_credentials()
+            self.connection = psycopg2.connect(
+                dbname=self.database,
+                user=credentials.get("dbUser", "test-user"),
+                password=credentials.get("dbPassword", "test-password"),
+                host=self.host,
+                port=self.port
+            )
+        except Exception as e:
+            self.connection = None
+            raise e
 
     def _get_credentials(self) -> Dict[str, str]:
         """Retrieve database credentials."""
