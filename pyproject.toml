@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rsq-aws"
+version = "1.0.0"
+description = "A comprehensive Python library for AWS services"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Database",
+]
+
+dependencies = [
+    "boto3>=1.36.21",
+    "botocore>=1.36.21",
+    "pandas>=2.2.0",
+    "psycopg2>=2.9.0",
+    "pyarrow>=19.0.0",
+    "python-dotenv>=1.0.0",
+    "s3transfer>=0.11.0",
+    "urllib3>=2.0.0",
+    "python-dateutil>=2.9.0",
+    "pytz>=2025.1",
+    "tzdata>=2025.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pandas-stubs>=2.2.0",
+    "types-pytz>=2025.1.0",
+    "colorama>=0.4.6",
+    "psutil>=7.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rsq230798/rsq_aws"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rsq_aws"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
