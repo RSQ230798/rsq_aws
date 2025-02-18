@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch, MagicMock
 import pandas as pd
-from src.rsq_aws.redshift.core.boto_connection import BotoConnection
+from src.rsq_aws.redshift.boto_connection import BotoConnection
 
 class TestRedshift(unittest.TestCase):
     """Test suite for Redshift class."""

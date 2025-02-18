@@ -5,7 +5,7 @@ import io
 import json
 import pyarrow as pa
 import pyarrow.parquet as pq
-from src.rsq_aws.s3.core.s3 import S3
+from src.rsq_aws.s3.s3 import S3
 
 class TestS3(unittest.TestCase):
     """Test suite for S3 class."""

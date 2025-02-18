@@ -1,5 +1,5 @@
 import unittest
-from src.rsq_aws.s3.core.path_factory import PathFactory
+from src.rsq_aws.s3.path_factory import PathFactory
 
 class TestPathFactory(unittest.TestCase):
     """Test suite for PathFactory class."""

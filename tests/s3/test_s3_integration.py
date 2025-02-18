@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime
 from dotenv import load_dotenv
 
-from src.rsq_aws.s3.core.s3 import S3
+from src.rsq_aws.s3.s3 import S3
 
 class S3IntegrationTestCase(unittest.TestCase):
     """Base class for S3 integration tests."""
