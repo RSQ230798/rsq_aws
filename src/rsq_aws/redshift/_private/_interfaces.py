@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod
 import pandas as pd
 
 class RedshiftConnection(ABC):
-    def __init__(self, workgroup: str, database: str, region: str):
-        self.workgroup = workgroup
-        self.database = database
-        self.region = region
+    """Protocol defining interface for Redshift database connections."""
+    def __init__(self, workgroup: str, database: str, region: str) -> None:  
+        self.workgroup: str = workgroup
+        self.database: str = database
+        self.region: str = region
 
-    @abstractmethod
     def query(self, sql: str) -> pd.DataFrame:
         """
         Execute a SQL query and return results as a pandas DataFrame.
@@ -17,6 +17,10 @@ class RedshiftConnection(ABC):
         
         Returns:
             DataFrame containing query results
+        
+        Example:
+            >>> connection = RedshiftConnectionImpl(workgroup="dev", database="analytics", region="us-east-1")
+            >>> df = connection.query("SELECT * FROM users LIMIT 10")
+            >>> print(df.head())
         """
-
-
+        pass

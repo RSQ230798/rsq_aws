@@ -12,7 +12,7 @@ class BotoConnection(RedshiftConnection):
     and retrieving results as pandas DataFrames.
     """
 
-    def __init__(self, workgroup: str, database: str, region: str):
+    def __init__(self, workgroup: str, database: str, region: str) -> None:
         """
         Initialize Redshift client with AWS credentials.
 
@@ -109,4 +109,3 @@ class BotoConnection(RedshiftConnection):
     def _get_columns_from_query_results(self, query_results: Dict[str, Any]) -> List[str]:
         """Extract column names from query results."""
         return [v["name"] for v in query_results["ColumnMetadata"]]
-
