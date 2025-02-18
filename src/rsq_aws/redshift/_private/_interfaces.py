@@ -1,12 +1,11 @@
-from abc import ABC, abstractmethod
+from typing import Protocol
 import pandas as pd
 
-class RedshiftConnection(ABC):
+class RedshiftConnection(Protocol):
     """Protocol defining interface for Redshift database connections."""
-    def __init__(self, workgroup: str, database: str, region: str) -> None:  
-        self.workgroup: str = workgroup
-        self.database: str = database
-        self.region: str = region
+    workgroup: str
+    database: str
+    region: str
 
     def query(self, sql: str) -> pd.DataFrame:
         """
@@ -23,4 +22,4 @@ class RedshiftConnection(ABC):
             >>> df = connection.query("SELECT * FROM users LIMIT 10")
             >>> print(df.head())
         """
-        pass
+        ...

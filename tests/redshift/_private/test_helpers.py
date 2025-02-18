@@ -1,84 +1,90 @@
-import unittest
-from unittest.mock import patch, MagicMock
+from typing import Generator
+import pytest
+from unittest.mock import Mock, patch, MagicMock
 from src.rsq_aws.redshift._private._helpers import Credentials
 
-class TestCredentials(unittest.TestCase):
-    """Test suite for Credentials class."""
+@pytest.fixture
+def credentials_setup() -> tuple[str, str]:
+    """Fixture for credentials setup."""
+    return ("test-workgroup", "us-east-1")
 
-    def setUp(self):
-        """Set up test fixtures before each test method."""
-        self.workgroup = "test-workgroup"
-        self.region = "us-east-1"
-
-    @patch('boto3.Session')
-    def test_init(self, mock_session):
-        """Test initialization of Credentials."""
-        # Setup mock
+@pytest.fixture
+def mock_session() -> Generator[MagicMock, None, None]:
+    """Fixture for mocked boto3 session."""
+    with patch('boto3.Session') as mock:
         mock_client = MagicMock()
-        mock_session.return_value.client.return_value = mock_client
+        mock.return_value.client.return_value = mock_client
+        yield mock
 
-        # Create credentials instance
-        creds = Credentials(self.workgroup, self.region)
+def test_init(credentials_setup: tuple[str, str], mock_session: MagicMock) -> None:
+    """Test initialization of Credentials."""
+    workgroup, region = credentials_setup
+    mock_client = mock_session.return_value.client.return_value
 
-        # Verify session creation
-        mock_session.assert_called_once_with(region=self.region)
-        # Verify client creation
-        mock_session.return_value.client.assert_called_once_with("redshift-serverless")
-        # Verify attributes
-        self.assertEqual(creds.workgroup, self.workgroup)
-        self.assertEqual(creds.region, self.region)
-        self.assertEqual(creds.client, mock_client)
+    # Create credentials instance
+    creds = Credentials(workgroup, region)
 
-    @patch('boto3.Session')
-    def test_get_credentials_success(self, mock_session):
-        """Test successful retrieval of credentials."""
-        # Setup mock response
-        mock_credentials = {
-            "dbUser": "test-user",
-            "dbPassword": "test-password"
-        }
-        mock_client = MagicMock()
-        mock_client.get_credentials.return_value = mock_credentials
-        mock_session.return_value.client.return_value = mock_client
+    # Verify session creation
+    mock_session.assert_called_once_with(region=region)
+    # Verify client creation
+    mock_session.return_value.client.assert_called_once_with("redshift-serverless")
+    # Verify attributes
+    assert creds.workgroup == workgroup
+    assert creds.region == region
+    assert creds.client == mock_client
 
-        # Create credentials instance and get credentials
-        creds = Credentials(self.workgroup, self.region)
-        result = creds.get()
+def test_get_credentials_success(
+    credentials_setup: tuple[str, str],
+    mock_session: MagicMock
+) -> None:
+    """Test successful retrieval of credentials."""
+    workgroup, region = credentials_setup
+    
+    # Setup mock response
+    mock_credentials = {
+        "dbUser": "test-user",
+        "dbPassword": "test-password"
+    }
+    mock_client = mock_session.return_value.client.return_value
+    mock_client.get_credentials.return_value = mock_credentials
 
-        # Verify get_credentials was called with correct parameters
-        mock_client.get_credentials.assert_called_once_with(
-            workgroupName=self.workgroup
-        )
-        # Verify returned credentials
-        self.assertEqual(result, mock_credentials)
+    # Create credentials instance and get credentials
+    creds = Credentials(workgroup, region)
+    result = creds.get()
 
-    @patch('boto3.Session')
-    def test_get_credentials_error(self, mock_session):
-        """Test error handling when getting credentials fails."""
-        # Setup mock to raise an exception
-        mock_client = MagicMock()
-        mock_client.get_credentials.side_effect = Exception("Failed to get credentials")
-        mock_session.return_value.client.return_value = mock_client
+    # Verify get_credentials was called with correct parameters
+    mock_client.get_credentials.assert_called_once_with(
+        workgroupName=workgroup
+    )
+    # Verify returned credentials
+    assert result == mock_credentials
 
-        # Create credentials instance
-        creds = Credentials(self.workgroup, self.region)
+def test_get_credentials_error(
+    credentials_setup: tuple[str, str],
+    mock_session: MagicMock
+) -> None:
+    """Test error handling when getting credentials fails."""
+    workgroup, region = credentials_setup
+    
+    # Setup mock to raise an exception
+    mock_client = mock_session.return_value.client.return_value
+    mock_client.get_credentials.side_effect = Exception("Failed to get credentials")
 
+    # Create credentials instance
+    creds = Credentials(workgroup, region)
+
+    # Verify exception is propagated
+    with pytest.raises(Exception) as exc_info:
+        creds.get()
+    assert "Failed to get credentials" in str(exc_info.value)
+
+def test_session_creation_error(credentials_setup: tuple[str, str]) -> None:
+    """Test error handling when session creation fails."""
+    workgroup, region = credentials_setup
+    
+    # Setup mock to raise an exception
+    with patch('boto3.Session', side_effect=Exception("Failed to create session")):
         # Verify exception is propagated
-        with self.assertRaises(Exception) as context:
-            creds.get()
-        self.assertIn("Failed to get credentials", str(context.exception))
-
-    @patch('boto3.Session')
-    def test_session_creation_error(self, mock_session):
-        """Test error handling when session creation fails."""
-        # Setup mock to raise an exception
-        mock_session.side_effect = Exception("Failed to create session")
-
-        # Verify exception is propagated
-        with self.assertRaises(Exception) as context:
-            Credentials(self.workgroup, self.region)
-        self.assertIn("Failed to create session", str(context.exception))
-
-
-if __name__ == '__main__':
-    unittest.main()
+        with pytest.raises(Exception) as exc_info:
+            Credentials(workgroup, region)
+        assert "Failed to create session" in str(exc_info.value)
