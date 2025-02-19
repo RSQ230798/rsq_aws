@@ -25,11 +25,11 @@ class PathFactory():
         
         if template_params:
             for param in parameters.values():
-                self.__param_is_not_string(param)
-                self.__param_is_empty(param)
-                self.__param_contains_forward_slash(param)
-                self.__param_is_not_lowercase(param)
-                self.__param_contains_spaces(param)                
+                self.__param_is_string(param)
+                self.__param_is_not_empty(param)
+                self.__param_does_not_contain_forward_slash(param)
+                self.__param_is_lowercase(param)
+                self.__param_does_not_contain_spaces(param)                
 
     def _validate_file_type(self, template_path: str) -> None:
         """
@@ -43,23 +43,23 @@ class PathFactory():
     def _format_path_with_parameters(self, template_path: str, parameters: Dict[str, str]) -> str:
         return template_path.format(**parameters)
 
-    def __param_is_not_string(self, param: str) ->None:
+    def __param_is_string(self, param: str) ->None:
         if not isinstance(param, str):
             raise Exception(f"{param} must be a string")
         
-    def __param_is_empty(self, param: str) -> None:
+    def __param_is_not_empty(self, param: str) -> None:
         if param == "":
             raise Exception(f"{param} cannot be empty")
         
-    def __param_contains_forward_slash(self, param: str) -> None:
+    def __param_does_not_contain_forward_slash(self, param: str) -> None:
         if "/" in param:
             raise Exception(f"{param} cannot contain '/'")
         
-    def __param_is_not_lowercase(self, param: str) -> None:
+    def __param_is_lowercase(self, param: str) -> None:
         if param.lower() != param:
             raise Exception(f"{param} must be in lowercase")
     
-    def __param_contains_spaces(self, param: str) -> None:
+    def __param_does_not_contain_spaces(self, param: str) -> None:
         if param.replace(" ", "_") != param:
             raise Exception(f"{param} must not contain spaces")
 
