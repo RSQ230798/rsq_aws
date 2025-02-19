@@ -31,7 +31,7 @@ class PsycopgConnection:
         self.region: str = region
         self.host: str = host
         self.port: int = port
-        self.connection: Optional[psycopg2.extensions.connection] = None
+        self.connection: psycopg2.extensions.connection = None
 
     def query(self, sql: str) -> pd.DataFrame:
         """
