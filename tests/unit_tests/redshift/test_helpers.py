@@ -16,7 +16,10 @@ def mock_session() -> Generator[MagicMock, None, None]:
         mock.return_value.client.return_value = mock_client
         yield mock
 
-def test_init(credentials_setup: tuple[str, str], mock_session: MagicMock) -> None:
+def test_init(
+        credentials_setup: tuple[str, str], 
+        mock_session: MagicMock
+    ) -> None:
     """Test initialization of Credentials."""
     workgroup, region = credentials_setup
     mock_client = mock_session.return_value.client.return_value
@@ -25,7 +28,7 @@ def test_init(credentials_setup: tuple[str, str], mock_session: MagicMock) -> No
     creds = Credentials(workgroup, region)
 
     # Verify session creation
-    mock_session.assert_called_once_with(region=region)
+    mock_session.assert_called_once_with(region_name=region)
     # Verify client creation
     mock_session.return_value.client.assert_called_once_with("redshift-serverless")
     # Verify attributes

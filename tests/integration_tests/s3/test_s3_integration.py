@@ -22,8 +22,7 @@ def aws_credentials() -> dict[str, str]:
     }
     
     if not all(credentials.values()):
-        pytest.skip("AWS credentials not available in environment")
-    
+        pytest.fail("AWS credentials not available in environment")
     return credentials
 
 @pytest.fixture(scope="session")
