@@ -2,7 +2,7 @@ from typing import Dict
 from rsq_utils.paths import clean_path, find_template_params
 
 class PathFactory():
-    def __init__(self):
+    def __init__(self) -> None:
         self.valid_files = ["parquet", "json"]
 
     def generate(self, template_path: str, parameters: Dict[str, str]) -> str:

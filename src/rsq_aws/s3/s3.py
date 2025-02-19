@@ -62,7 +62,7 @@ class S3:
         files = self._extract_files_from_directory_data(directory_data)
         folders = self._extract_folders_from_directory_data(directory_data)
 
-        tree = {}
+        tree: Dict[str, Any] = {}
         if files:
             tree["files"] = files
 
@@ -111,9 +111,9 @@ class S3:
         """
         path = clean_path(path)
 
-        if path.endswith(".json"):
+        if path.endswith(".json") and isinstance(data, dict):
             return self._upload_json_object(data, path)
-        elif path.endswith(".parquet"):
+        elif path.endswith(".parquet") and isinstance(data, pd.DataFrame):
             return self._upload_parquet_object(data, path)
         else:
             raise Exception("Unsupported file type. Only .json and .parquet files are supported.")
@@ -154,9 +154,11 @@ class S3:
         """
         path = clean_path(path)
         if path.endswith(".json"):
-            return self._get_json_object(path)
+            output_json: Dict = self._get_json_object(path)
+            return output_json
         elif path.endswith(".parquet"):
-            return self._get_parquet_object_via_pandas(path)
+            output_df: pd.DataFrame = self._get_parquet_object_via_pandas(path)
+            return output_df
         else:
             raise Exception("Unsupported file type. Only .json and .parquet files are supported.")
 
@@ -249,7 +251,7 @@ class S3:
 
     def _fetch_files_from_s3_path(self, path: str) -> List[str]:
         """Fetch all files from an S3 path, handling pagination."""
-        files = []
+        files: List[str] = []
         paginator = self.s3.get_paginator('list_objects_v2')
         
         for page in paginator.paginate(Bucket=self.bucket, Prefix=path):
@@ -270,7 +272,7 @@ class S3:
 
     def _create_new_path(self, old_path: str, suffix: str) -> str:
         """Create a new path by combining old path and suffix."""
-        return clean_path(old_path) + clean_path(suffix)
+        return str(clean_path(old_path) + clean_path(suffix))
 
     def _upload_json_object(self, data: Dict, path: str) -> str:
         """Upload a JSON object to S3."""
@@ -314,7 +316,8 @@ class S3:
         """Retrieve a JSON object from S3."""
         try:
             obj = self.s3.get_object(Bucket=self.bucket, Key=path)
-            return json.loads(obj['Body'].read().decode('utf-8'))
+            output: Dict = json.loads(obj['Body'].read().decode('utf-8'))
+            return output
         except Exception as e:
             raise Exception(f"Failed to get JSON file: {str(e)}")
 

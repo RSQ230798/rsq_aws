@@ -46,7 +46,7 @@ class BotoConnection:
         query_id = self._get_query_id(response)
         return self._get_query_results(query_id)
 
-    def _execute_query(self, sql_query: str) -> Dict[str, Any]:
+    def _execute_query(self, sql_query: str) -> Any:
         """Execute a SQL query and return the response."""
         return self.client.execute_statement(
             WorkgroupName=self.workgroup,
@@ -56,7 +56,7 @@ class BotoConnection:
 
     def _get_query_id(self, response: Dict[str, Any]) -> str:
         """Extract query ID from response."""
-        return response['Id']
+        return str(response['Id'])
     
     def _get_query_results(self, query_id: str) -> pd.DataFrame:
         """Get query results for a given query ID."""
@@ -86,21 +86,21 @@ class BotoConnection:
 
     def _has_result_set(self, query_id: str) -> bool:
         """Check if query has results."""
-        result_description = self.client.describe_statement(Id=query_id)
+        result_description: Dict[str, bool] = self.client.describe_statement(Id=query_id)
         return result_description["HasResultSet"]
 
     def _format_query_results_as_df(self, query_results: Dict[str, Any]) -> pd.DataFrame:
         """Format query results as a pandas DataFrame."""
-        if query_results is None:
+        if query_results:
+            json_results = self._format_query_results_as_json(query_results)
+            return pd.DataFrame(json_results)
+        else:
             return pd.DataFrame()
         
-        json_results = self._format_query_results_as_json(query_results)
-        return pd.DataFrame(json_results)
-
     def _format_query_results_as_json(self, query_results: Dict[str, Any]) -> Dict[str, List[Any]]:
         """Convert query results to JSON format."""
-        columns = self._get_columns_from_query_results(query_results)
-        data = {col: [] for col in columns}
+        columns: List[str] = self._get_columns_from_query_results(query_results)
+        data: Dict[str, List[Any]] = {col: [] for col in columns}
         
         for row in query_results["Records"]:
             for i, col in enumerate(columns):

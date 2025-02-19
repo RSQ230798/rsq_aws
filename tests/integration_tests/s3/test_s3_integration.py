@@ -215,7 +215,7 @@ def test_error_scenarios(
     invalid_json = object()  # Cannot be serialized to JSON
     with pytest.raises(Exception) as exc_info:
         s3_client.upload_object(invalid_json, f"{test_dir}test.json")
-    assert "Failed to upload" in str(exc_info.value)
+    assert "Unsupported file type" in str(exc_info.value)
 
 @pytest.fixture(autouse=True)
 def cleanup(

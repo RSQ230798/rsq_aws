@@ -1,5 +1,5 @@
 import boto3
-from typing import Dict 
+from typing import Dict
 
 class Credentials:
     def __init__(self, workgroup: str, region: str) -> None:
@@ -8,4 +8,5 @@ class Credentials:
         self.client = boto3.Session(region_name=self.region).client("redshift-serverless")
         
     def get(self) -> Dict[str, str]:
-        return self.client.get_credentials(workgroupName=self.workgroup)
+        results: Dict[str, str] = self.client.get_credentials(workgroupName=self.workgroup)
+        return results
