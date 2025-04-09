@@ -57,7 +57,7 @@ dev = [
 Homepage = "https://github.com/rsq230798/rsq_aws"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/rsq_aws"]
+packages = ["rsq_aws"]
 
 [tool.hatch.metadata]
 allow-direct-references = true

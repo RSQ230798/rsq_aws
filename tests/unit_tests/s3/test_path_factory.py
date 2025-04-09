@@ -1,6 +1,6 @@
 from typing import Dict
 import pytest
-from src.rsq_aws.s3.path_factory import PathFactory
+from rsq_aws.s3.path_factory import PathFactory
 
 @pytest.fixture
 def path_factory() -> PathFactory:

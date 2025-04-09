@@ -6,7 +6,7 @@ import io
 import json
 import pyarrow as pa
 import pyarrow.parquet as pq
-from src.rsq_aws.s3.s3 import S3
+from rsq_aws.s3.s3 import S3
 
 @pytest.fixture
 def s3_credentials() -> Dict[str, str]:

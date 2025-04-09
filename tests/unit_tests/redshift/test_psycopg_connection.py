@@ -3,8 +3,8 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 import pandas as pd
 import psycopg2
-from src.rsq_aws.redshift.psycopg_connection import PsycopgConnection
-from src.rsq_aws.redshift._private._interfaces import RedshiftConnection
+from rsq_aws.redshift.psycopg_connection import PsycopgConnection
+from rsq_aws.redshift._private._interfaces import RedshiftConnection
 
 @pytest.fixture
 def mock_session() -> Generator[MagicMock, None, None]:

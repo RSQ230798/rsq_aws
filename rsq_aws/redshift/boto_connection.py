@@ -2,7 +2,7 @@ from typing import Dict, List, Optional, Any, Union
 import boto3
 import pandas as pd
 
-from src.rsq_aws.redshift._private._interfaces import RedshiftConnection
+from rsq_aws.redshift._private._interfaces import RedshiftConnection
 
 class BotoConnection:
     """

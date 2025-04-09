@@ -1,7 +1,7 @@
 from typing import Generator
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from src.rsq_aws.redshift._private._helpers import Credentials
+from rsq_aws.redshift._private._helpers import Credentials
 
 @pytest.fixture
 def credentials_setup() -> tuple[str, str]:
