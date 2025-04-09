@@ -10,12 +10,13 @@ Main Components:
 - S3: Interface for AWS S3 operations (upload, download, management)
 - PathFactory: Utility for handling S3 paths with parameter substitution
 - BotoConnection: Interface for AWS Redshift operations using redshift-data API
+update
 """
 
-from src.rsq_aws.s3.s3 import S3
-from src.rsq_aws.s3.path_factory import PathFactory
-from src.rsq_aws.redshift.boto_connection import BotoConnection
-from src.rsq_aws.redshift.psycopg_connection import PsycopgConnection
+from .s3.s3 import S3
+from .s3.path_factory import PathFactory
+from .redshift.boto_connection import BotoConnection
+from .redshift.psycopg_connection import PsycopgConnection
 
 __version__ = "1.0.0"
 
