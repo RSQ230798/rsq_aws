@@ -13,10 +13,10 @@ Main Components:
 update
 """
 
-from .s3.s3 import S3
-from .s3.path_factory import PathFactory
-from .redshift.boto_connection import BotoConnection
-from .redshift.psycopg_connection import PsycopgConnection
+from src.rsq_aws.s3.s3 import S3
+from src.rsq_aws.s3.path_factory import PathFactory
+from src.rsq_aws.redshift.boto_connection import BotoConnection
+from src.rsq_aws.redshift.psycopg_connection import PsycopgConnection
 
 __version__ = "1.0.0"
 
