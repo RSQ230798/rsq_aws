@@ -2,8 +2,8 @@ from typing import Generator, Dict, Any
 import pytest
 from unittest.mock import Mock, patch
 import pandas as pd
-from src.rsq_aws.redshift.boto_connection import BotoConnection
-from src.rsq_aws.redshift._private._interfaces import RedshiftConnection
+from rsq_aws.redshift.boto_connection import BotoConnection
+from rsq_aws.redshift._private._interfaces import RedshiftConnection
 
 @pytest.fixture
 def mock_boto3_client() -> Generator[Mock, None, None]:

@@ -2,7 +2,7 @@ from typing import Dict
 import pytest
 import os
 from dotenv import load_dotenv
-from src.rsq_aws.redshift._private._helpers import Credentials
+from rsq_aws.redshift._private._helpers import Credentials
 
 @pytest.fixture(scope="session")
 def credentials_setup() -> Dict[str, str]:

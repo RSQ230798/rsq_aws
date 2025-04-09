@@ -3,7 +3,7 @@ import pytest
 import os
 import pandas as pd
 from dotenv import load_dotenv
-from src.rsq_aws.redshift.psycopg_connection import PsycopgConnection
+from rsq_aws.redshift.psycopg_connection import PsycopgConnection
 
 @pytest.fixture(scope="session")
 def connection_setup() -> Dict[str, str]:

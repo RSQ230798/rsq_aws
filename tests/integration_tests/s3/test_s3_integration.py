@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from dotenv import load_dotenv
 
-from src.rsq_aws.s3.s3 import S3
+from rsq_aws.s3.s3 import S3
 
 @pytest.fixture(scope="session")
 def aws_credentials() -> dict[str, str]:
